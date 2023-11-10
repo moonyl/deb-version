@@ -9,4 +9,5 @@ key_id=$(echo "$gpg_output" | grep -oP 'sig \d+\s+\K[0-9A-F]+')
 # 추출된 키 ID 출력
 echo "Key ID: $key_id"
 
-dpkg-sig -k $key_id --sign posod cpack-study_1.0.3-test_amd64.deb
+version="1.0.3-test"
+dpkg-sig -k $key_id --sign posod cpack-study_${version}_amd64.deb
