@@ -1,0 +1,37 @@
+cmake_minimum_required(VERSION 3.16)
+
+project(cpack-study)
+set(PROJECT_VERSION_MAJOR 1)
+set(PROJECT_VERSION_MINOR 0)
+set(PROJECT_VERSION_PATCH 3)
+set(PROJECT_VERSION_TWEAK test)
+
+add_executable(${PROJECT_NAME}
+    main.cpp
+)
+
+#install
+install(TARGETS ${PROJECT_NAME}
+    DESTINATION bin)
+
+# packaging for deb
+set(CPACK_GENERATOR "DEB")
+set(
+        CPACK_PACKAGE_NAME ${PROJECT_NAME}
+        CACHE STRING "cpack-study"
+)
+
+set(CPACK_PACKAGING_INSTALL_PREFIX /opt/cpack-study)
+set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}-${PROJECT_VERSION_TWEAK})
+
+set(CPACK_PACKAGE_CONTACT "moonysl@hanmail.net")
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Sang Moon, Lee <${CPACK_PACKAGE_CONTACT}>")
+
+execute_process(
+        COMMAND dpkg-architecture -qDEB_HOST_ARCH
+        OUTPUT_VARIABLE DEB_ARCH
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+set(CPACK_DEBIAN_FILE_NAME ${CPACK_PACKAGE_NAME}_${CPACK_PACKAGE_VERSION}_${DEB_ARCH}.deb)
+
+include(CPack)
