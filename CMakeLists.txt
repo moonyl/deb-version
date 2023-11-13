@@ -1,10 +1,21 @@
 cmake_minimum_required(VERSION 3.16)
 
 project(cpack-study)
-set(PROJECT_VERSION_MAJOR 1)
-set(PROJECT_VERSION_MINOR 0)
-set(PROJECT_VERSION_PATCH 3)
-set(PROJECT_VERSION_TWEAK test)
+execute_process(
+        COMMAND git describe 
+        OUTPUT_VARIABLE GIT_DESCRIBED
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+# message("GIT_DESCRIBED=${GIT_DESCRIBED}")
+# v 제거
+string(SUBSTRING ${GIT_DESCRIBED} 1 -1 GIT_VERSION)
+string(REGEX MATCH "([0-9]+)\\.([0-9]+)\\.([0-9]+)-(.+)?" _ ${GIT_VERSION})
+
+# 추출된 값
+set(PROJECT_VERSION_MAJOR ${CMAKE_MATCH_1})
+set(PROJECT_VERSION_MINOR ${CMAKE_MATCH_2})
+set(PROJECT_VERSION_PATCH ${CMAKE_MATCH_3})
+set(PROJECT_VERSION_TWEAK ${CMAKE_MATCH_4})
 
 add_executable(${PROJECT_NAME}
     main.cpp
